@@ -20,4 +20,9 @@ public class AppConfig {
     public RoomService getRoomService(){
         return new RoomService();
     }
+
+    @Dependency
+    public UserService userService() {
+        return new UserService();
+    }
 }

@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.codecool</groupId>
-    <artifactId>appointment-scheduler</artifactId>
+    <groupId>com.mng</groupId>
+    <artifactId>chat</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>Appointment Scheduler</name>
+    <name>Chat</name>
 
     <build>
         <plugins>

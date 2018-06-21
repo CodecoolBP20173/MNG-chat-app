@@ -30,7 +30,11 @@ public class RoomController {
         ctx.reply("room/messages", messageService.getMessages(roomName));
         User user = (User)ctx.getProperty("user");
         roomService.join(roomName, user);
-        ctx.emitToRoom(roomName,"join",roomService.getUsers(roomName));
+        ctx.emitToRoom(roomName,"join", roomService.getUsers(roomName));
     }
 
+    @OnMessage(route = "rooms")
+    public void getRooms(SocketContext ctx, String msg) {
+        ctx.reply(roomService.getAllRooms());
+    }
 }

@@ -28,8 +28,12 @@ public class RoomService {
         }
     }
 
-    public Set<UserDTO> getUsers(String roomName) {
+    public Set<String> getUsers(String roomName) {
         System.out.println(this.rooms.get(roomName));
-        return this.rooms.get(roomName).stream().map(UserDTO::new).collect(Collectors.toSet());
+        return this.rooms.get(roomName).stream().map(User::getNickName).collect(Collectors.toSet());
+    }
+
+    public Set<String> getAllRooms() {
+        return rooms.keySet();
     }
 }
