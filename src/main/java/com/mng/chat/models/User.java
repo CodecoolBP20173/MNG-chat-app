@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity(name = "users")
+@NamedQuery(name = "getUserByEmail", query = "FROM users WHERE email = :email")
 public class User {
 
     @Id
@@ -81,4 +82,18 @@ public class User {
         this.pictureUrl = pictureUrl;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", managedRooms=" + managedRooms +
+                ", messages=" + messages +
+                '}';
+    }
 }
