@@ -63,5 +63,14 @@ public class Message {
         this.targetAddress = targetAddress;
     }
 
-
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", owner=" + owner +
+                ", type=" + type +
+                ", targetAddress='" + targetAddress + '\'' +
+                '}';
+    }
 }

@@ -27,7 +27,7 @@ public class RoomController {
     public void joinRoom(SocketContext ctx, String roomName) {
         ctx.leaveAllRooms();
         ctx.joinRoom(roomName);
-        ctx.reply(messageService.getMessages(roomName));
+        ctx.reply("room/messages", messageService.getMessages(roomName));
         User user = (User)ctx.getProperty("user");
         roomService.join(roomName, user);
         ctx.emitToRoom(roomName,"join",roomService.getUsers(roomName));

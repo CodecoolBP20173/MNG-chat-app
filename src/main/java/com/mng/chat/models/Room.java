@@ -23,4 +23,13 @@ public class Room {
     public Set<User> getAdmins() {
         return admins;
     }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", admins=" + admins +
+                '}';
+    }
 }

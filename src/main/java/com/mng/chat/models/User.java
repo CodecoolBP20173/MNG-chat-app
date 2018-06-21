@@ -82,4 +82,18 @@ public class User {
         this.pictureUrl = pictureUrl;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", managedRooms=" + managedRooms +
+                ", messages=" + messages +
+                '}';
+    }
 }

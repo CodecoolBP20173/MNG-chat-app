@@ -10,4 +10,14 @@ public class AppConfig {
     public DataManager getDataManager(){
         return new DataManager("mng_chat");
     }
+
+    @Dependency
+    public MessageService getMessageService(){
+        return new MessageService();
+    }
+
+    @Dependency
+    public RoomService getRoomService(){
+        return new RoomService();
+    }
 }

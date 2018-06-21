@@ -3,6 +3,7 @@ package com.mng.chat.controllers;
 import com.danielcs.webserver.socket.SocketContext;
 import com.danielcs.webserver.socket.annotations.OnMessage;
 import com.danielcs.webserver.socket.annotations.SocketController;
+import com.mng.chat.dto.UserDTO;
 import com.mng.chat.models.User;
 import com.mng.chat.services.DataManager;
 
@@ -12,9 +13,11 @@ import javax.persistence.NoResultException;
 @SocketController
 public class UserController {
     private EntityManager em;
+    private DataManager dm;
 
     public UserController(DataManager dm) {
         em = dm.getEntityManager();
+        this.dm = dm;
     }
 
     @OnMessage(route="login", type = User.class)
@@ -25,11 +28,12 @@ public class UserController {
                     .setParameter("email", user.getEmail())
                     .getSingleResult();
         } catch (NoResultException e) {
-            em.persist(user);
+            dm.persistEntity(em, user);
             userInDatabase = user;
         }
         ctx.setProperty("user", userInDatabase);
-        ctx.reply(userInDatabase);
+        ctx.setProperty("email", userInDatabase.getEmail());
+        ctx.reply(new UserDTO(userInDatabase));
     }
 
 

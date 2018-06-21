@@ -12,20 +12,24 @@ import javax.persistence.EntityManager;
 public class MessageController {
 
     private EntityManager em;
+    private DataManager dm;
 
     public MessageController(DataManager dm) {
         this.em = dm.getEntityManager();
+        this.dm = dm;
     }
 
     @OnMessage(route="send", type = Message.class)
     public void send(SocketContext ctx, Message message) {
-        if(message.getType() == Message.TargetType.USER) {
+        System.out.println(message);
+        if(message.getType().equals(Message.TargetType.USER)) {
+            System.out.println("private");
             ctx.sendToUser("email", message.getTargetAddress(), "send", message.getContent());
         } else {
           ctx.emitToRoom(message.getTargetAddress(), "send", message.getContent());
         }
         // TODO save pm to cache
-        em.persist(message);
+//        this.dm.persistEntity(em,message);
 
     }
 
