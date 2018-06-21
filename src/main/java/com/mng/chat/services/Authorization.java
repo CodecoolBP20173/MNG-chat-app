@@ -1,5 +1,6 @@
 package com.mng.chat.services;
 
+import com.danielcs.webserver.socket.annotations.AuthGuard;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwk.HttpsJwks;
 import org.jose4j.jws.AlgorithmIdentifiers;
@@ -17,7 +18,7 @@ public class Authorization {
     private static HttpsJwks httpsJwks = new HttpsJwks(System.getenv("JWKS_ENDPOINT"));
     private static HttpsJwksVerificationKeyResolver resolver = new HttpsJwksVerificationKeyResolver(httpsJwks);
 
-    ///@AuthGuard
+    @AuthGuard
     public static boolean processTokenValidity(String token) {
         try {
             JwtConsumer jwtConsumer = new JwtConsumerBuilder()
