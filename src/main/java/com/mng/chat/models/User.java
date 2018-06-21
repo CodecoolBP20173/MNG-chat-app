@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity(name = "users")
+@NamedQuery(name = "getUserByEmail", query = "FROM users WHERE email = :email")
 public class User {
 
     @Id
