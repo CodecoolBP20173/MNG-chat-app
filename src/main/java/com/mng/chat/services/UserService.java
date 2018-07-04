@@ -4,21 +4,20 @@ import com.mng.chat.models.User;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class UserService {
 
-    private final Set<User> users = new HashSet<>();
+    private Set<User> users = new HashSet<>();
+
+    public Set<User> getUsers() {
+        return users;
+    }
 
     public void loginUser(User user) {
-        this.users.add(user);
+        users.add(user);
     }
 
-    public void logoutUser(User user) {
-        this.users.remove(user);
-    }
-
-    public Set<String> getUserNames() {
-        return users.stream().map(User::getGivenName).collect(Collectors.toSet());
+    public void logoutUser(int userId) {
+        users.removeIf(user -> user.getId() == userId);
     }
 }

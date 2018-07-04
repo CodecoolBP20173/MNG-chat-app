@@ -1,39 +1,48 @@
 package com.mng.chat.services;
 
 import com.danielcs.webserver.socket.annotations.InjectionPoint;
-import com.mng.chat.dto.UserDTO;
-import com.mng.chat.models.Room;
-import com.mng.chat.models.User;
-
-import javax.persistence.EntityManager;
+import com.mng.chat.repository.dao.RoomDAO;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class RoomService {
-    Map<String, Set<User>> rooms = new HashMap<>();
-    EntityManager em;
+
+    private RoomDAO roomRepository;
+    private Map<String, Set<Integer>> rooms = new HashMap<>();
 
     @InjectionPoint
-    public void setEm(DataManager dm) {
-        em = dm.getEntityManager();
-        List<Room> rooms = em.createNamedQuery("getAllRooms", Room.class).getResultList();
-        for (Room room : rooms) {
-            this.rooms.put(room.getName(), new HashSet<User>());
+    public void setRoomRepository(RoomDAO roomRepository) {
+        this.roomRepository = roomRepository;
+    }
+
+    private void initRooms() {
+        if (rooms.isEmpty()) {
+            Set<String> rooms = roomRepository.getRooms();
+            for (String room : rooms) {
+                this.rooms.put(room, new HashSet<>());
+            }
         }
     }
 
-    public void join(String roomName, User user) {
-        if (rooms.get(roomName)!=null) {
-            rooms.get(roomName).add(user);
+    public boolean attemptRoomJoin(String prevRoom, String nextRoom, int userId) {
+        initRooms();
+        if (rooms.keySet().contains(nextRoom)) {
+            rooms.get(prevRoom).remove(userId);
+            rooms.get(nextRoom).add(userId);
+            return true;
         }
+        return false;
     }
 
-    public Set<String> getUsers(String roomName) {
-        System.out.println(this.rooms.get(roomName));
-        return this.rooms.get(roomName).stream().map(User::getNickName).collect(Collectors.toSet());
+    public boolean attemptRoomJoin(String firstRoom, int userId) {
+        initRooms();
+        if (rooms.keySet().contains(firstRoom)) {
+            rooms.get(firstRoom).add(userId);
+            return true;
+        }
+        return false;
     }
 
-    public Set<String> getAllRooms() {
-        return rooms.keySet();
+    public Set<Integer> getUsersInRoom(String room) {
+        return rooms.get(room);
     }
 }

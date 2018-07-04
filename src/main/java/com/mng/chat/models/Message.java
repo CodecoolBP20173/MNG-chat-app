@@ -1,26 +1,26 @@
 package com.mng.chat.models;
 
-import javax.persistence.*;
-
-@Entity
 public class Message {
-    @Id
-    @GeneratedValue
+
     private int id;
-
     private String content;
-
-    @ManyToOne
-    private User owner;
-
-    @Enumerated(value = EnumType.STRING)
-    private TargetType type;
-
     private String targetAddress;
+    private TargetType type;
+    private int ownerId;
 
-    public enum TargetType{
-        USER,
-        ROOM
+    public Message(int id, String content, String targetAddress, TargetType type, int ownerId) {
+        this.id = id;
+        this.content = content;
+        this.targetAddress = targetAddress;
+        this.type = type;
+        this.ownerId = ownerId;
+    }
+
+    public Message(String content, String targetAddress, TargetType type, int ownerId) {
+        this.content = content;
+        this.targetAddress = targetAddress;
+        this.type = type;
+        this.ownerId = ownerId;
     }
 
     public int getId() {
@@ -35,42 +35,15 @@ public class Message {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public String getTargetAddress() {
+        return targetAddress;
     }
 
     public TargetType getType() {
         return type;
     }
 
-    public void setType(TargetType type) {
-        this.type = type;
-    }
-
-    public String getTargetAddress() {
-        return targetAddress;
-    }
-
-    public void setTargetAddress(String targetAddress) {
-        this.targetAddress = targetAddress;
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", content='" + content + '\'' +
-                ", owner=" + owner +
-                ", type=" + type +
-                ", targetAddress='" + targetAddress + '\'' +
-                '}';
+    public int getOwnerId() {
+        return ownerId;
     }
 }
