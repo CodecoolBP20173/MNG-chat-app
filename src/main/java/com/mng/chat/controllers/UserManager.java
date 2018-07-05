@@ -3,6 +3,8 @@ package com.mng.chat.controllers;
 import com.danielcs.webserver.socket.SocketContext;
 import com.danielcs.webserver.socket.annotations.OnMessage;
 import com.danielcs.webserver.socket.annotations.SocketController;
+import com.mng.chat.models.RoomEmit;
+import com.mng.chat.models.User;
 import com.mng.chat.services.RoomService;
 import com.mng.chat.services.UserService;
 
@@ -19,29 +21,31 @@ public class UserManager {
 
     @OnMessage(route = "join")
     public void joinRoom(SocketContext ctx, String roomName) {
-        Object currentRoom = ctx.getProperty("currentRoom");
-        int userId = (int)ctx.getProperty("id");
-        boolean joined;
-
-        if (currentRoom == null) {
-            joined = roomService.attemptRoomJoin(roomName, userId);
-        } else {
-            joined = roomService.attemptRoomJoin(currentRoom.toString(), roomName, userId);
-        }
+        User user = new User(
+                (int)ctx.getProperty("id"),
+                ctx.getProperty("nickname").toString()
+        );
+        boolean joined = roomService.attemptRoomJoin(roomName, user);
 
         if (joined) {
-            ctx.leaveAllRooms();
             ctx.joinRoom(roomName);
-            ctx.setProperty("currentRoom", roomName);
-            ctx.emitToRoom(roomName, "join", roomService.getUsersInRoom(roomName));
-        } else {
-            ctx.reply("DENIED");
+            ctx.emitToRoom(roomName, "join", new RoomEmit(roomName, roomService.getUsersInRoom(roomName)));
         }
+    }
+
+    @OnMessage(route = "connect")
+    public void onConnect(SocketContext ctx) {
+        ctx.emit("users", userService.getUsers());
     }
 
     @OnMessage(route = "disconnect")
     public void onDisconnect(SocketContext ctx) {
-        userService.logoutUser((int)ctx.getProperty("id"));
+        User user = new User(
+                (int)ctx.getProperty("id"),
+                ctx.getProperty("nickname").toString()
+        );
+        userService.logoutUser(user);
+        roomService.userLeft(user);
         ctx.emit("users", userService.getUsers());
     }
 }

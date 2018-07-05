@@ -17,7 +17,7 @@ public class UserService {
         users.add(user);
     }
 
-    public void logoutUser(int userId) {
-        users.removeIf(user -> user.getId() == userId);
+    public void logoutUser(User user) {
+        users.remove(user);
     }
 }
