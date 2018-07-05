@@ -6,7 +6,7 @@ import com.danielcs.webserver.socket.SocketServer;
 public class Main {
 
     public static void main(String[] args) {
-        Server server = new SocketServer(8080, "com.mng.chat.controllers");
+        Server server = new SocketServer(8000, "com.mng.chat.controllers");
         server.start();
     }
 }

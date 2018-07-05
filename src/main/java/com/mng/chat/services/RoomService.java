@@ -27,8 +27,7 @@ public class RoomService {
     public boolean attemptRoomJoin(String room, User user) {
         initRooms();
         if (rooms.keySet().contains(room)) {
-            rooms.get(room).add(user);
-            return true;
+            return rooms.get(room).add(user);
         }
         return false;
     }
