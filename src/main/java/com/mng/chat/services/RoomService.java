@@ -1,13 +1,14 @@
 package com.mng.chat.services;
 
 import com.danielcs.webserver.socket.annotations.InjectionPoint;
+import com.mng.chat.models.User;
 import com.mng.chat.repository.dao.RoomDAO;
 import java.util.*;
 
 public class RoomService {
 
     private RoomDAO roomRepository;
-    private Map<String, Set<Integer>> rooms = new HashMap<>();
+    private Map<String, Set<User>> rooms = new HashMap<>();
 
     @InjectionPoint
     public void setRoomRepository(RoomDAO roomRepository) {
@@ -23,26 +24,24 @@ public class RoomService {
         }
     }
 
-    public boolean attemptRoomJoin(String prevRoom, String nextRoom, int userId) {
+    public boolean attemptRoomJoin(String room, User user) {
         initRooms();
-        if (rooms.keySet().contains(nextRoom)) {
-            rooms.get(prevRoom).remove(userId);
-            rooms.get(nextRoom).add(userId);
+        if (rooms.keySet().contains(room)) {
+            rooms.get(room).add(user);
             return true;
         }
         return false;
     }
 
-    public boolean attemptRoomJoin(String firstRoom, int userId) {
-        initRooms();
-        if (rooms.keySet().contains(firstRoom)) {
-            rooms.get(firstRoom).add(userId);
-            return true;
-        }
-        return false;
-    }
-
-    public Set<Integer> getUsersInRoom(String room) {
+    public Set<User> getUsersInRoom(String room) {
         return rooms.get(room);
+    }
+
+    public void userLeft(User user) {
+        rooms.keySet().forEach(room -> rooms.get(room).remove(user));
+    }
+
+    public boolean isUserInRoom(User user, String room) {
+        return rooms.containsKey(room) && rooms.get(room).contains(user);
     }
 }

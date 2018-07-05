@@ -2,28 +2,37 @@ package com.mng.chat.models;
 
 public class MessageDTO {
 
-    private int userId;
-    private String nickname;
+    private int id;
+    private String name;
     private String content;
 
-    public MessageDTO(int userId, String nickname, String content) {
-        this.userId = userId;
-        this.nickname = nickname;
+    public MessageDTO(int id, String name, String content) {
+        this.id = id;
+        this.name = name;
         this.content = content;
     }
 
     public MessageDTO() {
     }
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getName() {
+        return name;
     }
 
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                '}';
     }
 }
