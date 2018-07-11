@@ -17,15 +17,16 @@ public class MessageRepository implements MessageDAO {
     public Integer saveMessage(Message message) {
         return message.getType() != null ? db.fetchOne(
                 "INSERT INTO message (content, target_address, type, owner_id)" +
-                        "    VALUES (?, ?, ?, ?::INTEGER) RETURNING id;",
+                        "    VALUES (?, ?, ?, ?) RETURNING id;",
                 rs -> rs.getInt("id"),
                 message.getContent(), message.getTargetAddress(),
                 String.valueOf(message.getType()), String.valueOf(message.getOwnerId()))
                 :
                 db.fetchOne(
                         "INSERT INTO message (content, owner_id)" +
-                                "    VALUES (?, ?::INTEGER) RETURNING id;",
+                                "    VALUES (?, ?) RETURNING id;",
                         rs -> rs.getInt("id"),
-                        message.getContent(), String.valueOf(message.getOwnerId()));
+                        message.getContent(), message.getOwnerId()
+                );
     }
 }

@@ -1,6 +1,7 @@
 package com.mng.chat.repository;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,28 +18,24 @@ public class SQLUtils {
         }
     }
 
-    public void executeUpdate(String queryLine, String... params) {
+    public void executeUpdate(String queryLine, Object... params) {
         try (PreparedStatement statement = connection.prepareStatement(queryLine)){
-            int counter = 1;
-            for (String param : params) {
-                statement.setString(counter++, param);
-            }
+
+            setParameters(statement, params);
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Database Error!");
-            e.printStackTrace();
+            System.out.printf(
+                    "Database Error occurred when trying to execute a mutation. Details:\nQuery: %s\nParams: %s",
+                    queryLine, Arrays.toString(params)
+            );
         }
     }
 
-    public <T> T fetchOne(String queryLine, ModelAssembler<T> assembler, String... params) {
+    public <T> T fetchOne(String queryLine, ModelAssembler<T> assembler, Object... params) {
         try (PreparedStatement statement = connection.prepareStatement(queryLine)) {
 
-            int counter = 1;
-            for (String param : params) {
-                statement.setString(counter++, param);
-            }
-
+            setParameters(statement, params);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 return assembler.assemble(rs);
@@ -46,20 +43,18 @@ public class SQLUtils {
             return null;
 
         } catch (SQLException e) {
-            System.out.println("Database Error!");
-            e.printStackTrace();
+            System.out.printf(
+                    "Database Error occurred when trying to fetch an entry. Details:\nQuery: %s\nParams: %s",
+                    queryLine, Arrays.toString(params)
+            );
         }
         return null;
     }
 
-    public <T> List<T> fetchAll(String queryLine, ModelAssembler<T> assembler, String... params) {
+    public <T> List<T> fetchAll(String queryLine, ModelAssembler<T> assembler, Object... params) {
         try (PreparedStatement statement = connection.prepareStatement(queryLine)) {
 
-            int counter = 1;
-            for (String param : params) {
-                statement.setString(counter++, param);
-            }
-
+            setParameters(statement, params);
             ResultSet rs = statement.executeQuery();
             List<T> results = new LinkedList<>();
             while (rs.next()) {
@@ -69,9 +64,18 @@ public class SQLUtils {
             return results;
 
         } catch (SQLException e) {
-            System.out.println("Database Error!");
-            e.printStackTrace();
+            System.out.printf(
+                    "Database Error occurred when trying to fetch multiple entries. Details:\nQuery: %s\nParams: %s",
+                    queryLine, Arrays.toString(params)
+            );
         }
         return null;
+    }
+
+    private void setParameters(PreparedStatement statement, Object[] params) throws SQLException {
+        int counter = 1;
+        for (Object param : params) {
+            statement.setObject(counter++, param);
+        }
     }
 }
