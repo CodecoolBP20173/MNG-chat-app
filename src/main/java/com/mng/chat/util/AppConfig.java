@@ -35,7 +35,7 @@ public class AppConfig {
     }
 
     @Dependency
-    public RoomService getMessageService() {
+    public RoomService getRoomService() {
         return new RoomService();
     }
 
